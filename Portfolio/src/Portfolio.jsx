@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useSpring, animated } from "@react-spring/web";
 import { useInView } from "react-intersection-observer";
-import insta from "./assets/Portfolio/insta.bmp";
+import DataExtraction from "./assets/Portfolio/dataExtraction.png";
 import obms from "./assets/Portfolio/OBMS.bmp";
 import pos from "./assets/Portfolio/POS.jpg";
 
@@ -11,7 +11,7 @@ export default function Portfolio() {
     {
       id: 1,
       title: "AI DATA EXTRACTION",
-      imgSrc: insta,
+      imgSrc: DataExtraction,
       description: "Using AI, we optimise the acquisition of image and text from multiple sources. Techniques include onsite scanning, drone photography,negotiation with archives and the formation of alliances with corporations, religious organisations and governments",
     },
     {

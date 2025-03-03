@@ -1,6 +1,6 @@
 import React from "react";
 
-import lifewoodLogo from "../assets/logo.png";
+import lifewoodLogo from "../assets/logo.svg";
 
 export default function StockTicker() {
   return (

@@ -29,7 +29,7 @@ export default function Introduction() {
     transform: "scale(0.9)",
   }));
 
-  const [displayText, setDisplayText] = useState("Zane Daniel");
+  const [displayText, setDisplayText] = useState("Lifewood");
   const texts = ["Harness the potential of AI", "Be Amazed."];
   const typingSpeed = 100;
   const eraseSpeed = 90;
