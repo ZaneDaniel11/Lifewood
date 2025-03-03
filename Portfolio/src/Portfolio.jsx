@@ -10,9 +10,9 @@ export default function Portfolio() {
   const portfolioItems = [
     {
       id: 1,
-      title: "Instagram Clone",
+      title: "AI DATA EXTRACTION",
       imgSrc: insta,
-      description: "HTML/CSS/JAVASCRIPT/AJAX/JQUERY/PHP",
+      description: "Using AI, we optimise the acquisition of image and text from multiple sources. Techniques include onsite scanning, drone photography,negotiation with archives and the formation of alliances with corporations, religious organisations and governments",
     },
     {
       id: 2,
@@ -83,7 +83,7 @@ export default function Portfolio() {
   // }, []);
 
   return (
-    <div className="relative bg-[#F3B304] font-kreon h-auto py-8">
+    <div className="relative bg-header-yellow font-kanit h-auto py-8">
       <div className="text-center mb-8 mx-1.5 lg:pb-[80px]">
         {/* {isVisible && (
           <img
@@ -97,7 +97,7 @@ export default function Portfolio() {
           style={h1Spring}
           className="text-5xl text-black font-bold md:text-7xl md:pt-[100px] lg:text-9xl"
         >
-          PORTFOLIO
+          PROJECTS
         </animated.h1>
         <div className="mt-3 md:mt-6 lg:mt-10">
           <animated.span
@@ -105,7 +105,7 @@ export default function Portfolio() {
             style={spanSpring}
             className="text-2xl text-black font-bold md:text-4xl lg:text-6xl mt-7"
           >
-            A Collection I've Been Working On
+            Discover what our AI Data Services have accomplished
           </animated.span>
         </div>
       </div>

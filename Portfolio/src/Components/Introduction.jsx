@@ -112,7 +112,7 @@ export default function Introduction() {
           </animated.p>
           <animated.button
             style={buttonSpring}
-            className="bg-[#60A805] text-white font-kanit px-9 py-2 rounded font-bold border-2 border-black md:px-16 md:border-[3px] md:text-2xl lg:w-[220px] lg:h-[50px] lg:mt-7"
+            className="bg-[#60A805] rounded-3xl text-white font-kanit px-9 py-2 font-bold border-2 border-black md:px-16 md:border-[3px] md:text-2xl lg:w-[220px] lg:h-[50px] lg:mt-7"
           >
             Apply Now
           </animated.button>
