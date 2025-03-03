@@ -31,8 +31,8 @@ export default function Introduction() {
 
   const [displayText, setDisplayText] = useState("Zane Daniel");
   const texts = ["Harness the potential of AI", "Be Amazed."];
-  const typingSpeed = 150;
-  const eraseSpeed = 100;
+  const typingSpeed = 100;
+  const eraseSpeed = 90;
   const delayBeforeErase = 1500;
   const delayBeforeTypingStarts = 2000;
 
@@ -93,28 +93,28 @@ export default function Introduction() {
         <div className="text-center md:text-left lg:ml-20">
           <animated.h1
             style={helloSpring}
-            className="text-8xl m-0 mb-4 font-bold text-black md:text-7xl lg:text-9xl"
+            className=" font-kanit text-8xl m-0 mb-4 font-bold text-black md:text-7xl lg:text-9xl"
           >
             Lifewood
           </animated.h1>
           <animated.p
             style={Namewhat}
-            className="text-4xl text-white mb-2 font-bold md:text-5xl lg:text-7xl lg:mt-6 relative whitespace-nowrap"
+            className="text-4xl font-kanit text-white mb-2 font-bold md:text-5xl lg:text-6xl lg:mt-6 relative whitespace-nowrap"
           >
             {displayText}
             <span className="cursor"></span>
           </animated.p>
           <animated.p
             style={descSpring}
-            className="text-2xl mb-6 md:text-3xl lg:text-5xl lg:mt-4"
+            className="font-kanit text-2xl mb-6 md:text-3xl lg:text-5xl lg:mt-4"
           >
             Harnessing the power of AI
           </animated.p>
           <animated.button
             style={buttonSpring}
-            className="bg-custom-red text-white px-9 py-2 rounded font-bold border-2 border-black md:px-16 md:border-[3px] md:text-2xl lg:w-[220px] lg:h-[50px] lg:mt-7"
+            className="bg-[#60A805] text-white font-kanit px-9 py-2 rounded font-bold border-2 border-black md:px-16 md:border-[3px] md:text-2xl lg:w-[220px] lg:h-[50px] lg:mt-7"
           >
-            Subscribe
+            Apply Now
           </animated.button>
         </div>
         <animated.div

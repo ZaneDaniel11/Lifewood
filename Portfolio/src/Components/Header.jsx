@@ -5,7 +5,7 @@ export default function Headers() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="bg-header-yellow font-Kanit block mt-6">
+    <div className="bg-header-yellow font-kanit block mt-6">
       <div className="flex justify-between items-center h-24 mx-5 md:mx-20 lg:mx-28">
         {/* Logo */}
         <div className="flex space-x-4 items-center">
