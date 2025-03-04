@@ -2,8 +2,13 @@ import React, { useState, useEffect } from "react";
 import { useSpring, animated } from "@react-spring/web";
 import { useInView } from "react-intersection-observer";
 import DataExtraction from "./assets/Portfolio/dataExtraction.png";
-import obms from "./assets/Portfolio/OBMS.bmp";
-import pos from "./assets/Portfolio/POS.jpg";
+import MachineLearning from "./assets/Portfolio/MachineLearning.png";
+import Genealogy from "./assets/Portfolio/geneology.png";
+import Natural from "./assets/Portfolio/natural-lang.png";
+import Customer from "./assets/Portfolio/CustomerService.png";
+import Computer from "./assets/Portfolio/ComputerVision.png";
+import Driving from "./assets/Portfolio/autonomousDriving.png";
+
 
 
 export default function Portfolio() {
@@ -12,37 +17,43 @@ export default function Portfolio() {
       id: 1,
       title: "AI DATA EXTRACTION",
       imgSrc: DataExtraction,
-      description: "Using AI, we optimise the acquisition of image and text from multiple sources. Techniques include onsite scanning, drone photography,negotiation with archives and the formation of alliances with corporations, religious organisations and governments",
+      description: "We use AI to optimize image and text acquisition through scanning, drone photography, archival negotiation, and partnerships with corporations, religious groups, and governments",
     },
     {
       id: 2,
-      title: "Bogo Central Bus Management System",
-      imgSrc: obms,
-      description: "HTML/CSS/JQUERY/JAVASCRIPT/PHP",
+      title: "Machine Learning Enablement",
+      imgSrc: MachineLearning,
+      description: "Our flexible data solutions support all ML systems, from simple data to deep learning.",
     },
     {
       id: 3,
-      title: "Point of Sale System",
-      imgSrc: pos,
-      description: "REACT JS/TAILWIND CSS/.NET Dapper",
+      title: "Ai Enabled Customer Service",
+      imgSrc: Customer,
+      description: "REACT JS/TAILWIND CSS/.NET DapperAI-driven customer service delivers fast, personalized experiences that boost engagement.",
     },
     {
       id: 3,
-      title: "Point of Sale System",
-      imgSrc: pos,
-      description: "REACT JS/TAILWIND CSS/.NET Dapper",
+      title: "Genealogy",
+      imgSrc: Genealogy,
+      description: "AI-powered Lifewood preserves and digitizes records at scale, unlocking histories in any language or condition.",
     },
     {
       id: 3,
-      title: "Point of Sale System",
-      imgSrc: pos,
-      description: "REACT JS/TAILWIND CSS/.NET Dapper",
+      title: "Natural Language Processing",
+      imgSrc: Natural,
+      description: "We partner with top NLP companies and provide solutions in 50+ languages with a global workforce.",
     },
     {
       id: 3,
-      title: "Point of Sale System",
-      imgSrc: pos,
-      description: "REACT JS/TAILWIND CSS/.NET Dapper",
+      title: "Computer Vision",
+      imgSrc: Computer,
+      description: "Lifewood delivers complete data solutions for CV, from collection to annotation, ensuring high-quality training data.",
+    },
+        {
+      id: 3,
+      title: "Autonomous Driving Technology",
+      imgSrc: Driving ,
+      description: "Lifewood fuels innovation, advancing Autonomous Driving Technology.",
     },
     // Add more items as needed
   ];
@@ -71,27 +82,10 @@ export default function Portfolio() {
     config: { tension: 250, friction: 20 },
   });
 
-  // // State and effect to toggle GIF visibility
-  // const [isVisible, setIsVisible] = useState(true);
-
-  // useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     setIsVisible((prev) => !prev);
-  //   }, 3000); // Toggle every 5 seconds
-
-  //   return () => clearInterval(interval);
-  // }, []);
-
   return (
     <div className="relative bg-header-yellow font-kanit h-auto py-8">
       <div className="text-center mb-8 mx-1.5 lg:pb-[80px]">
-        {/* {isVisible && (
-          <img
-            src={what}
-            alt="Bottom-Left GIF"
-            className="absolute left-0 w-15 h-15 md:w-32 md:h-32 lg:w-30 lg:h-30 lg:mt-56"
-          />
-        )} */}
+    
         <animated.h1
           ref={refH1}
           style={h1Spring}
@@ -135,7 +129,7 @@ function PortfolioItem({ title, imgSrc, description, index }) {
     opacity: inView ? 1 : 0,
     transform: inView ? "scale(1)" : "scale(0.7)",
     config: { tension: 200, friction: 15 },
-    delay: index * 250, // Reduced delay for smoother appearance
+    delay: index * 200,
   });
 
   return (
