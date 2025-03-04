@@ -9,98 +9,69 @@ import Customer from "./assets/Portfolio/CustomerService.png";
 import Computer from "./assets/Portfolio/ComputerVision.png";
 import Driving from "./assets/Portfolio/autonomousDriving.png";
 
-
-
 export default function Portfolio() {
   const portfolioItems = [
     {
       id: 1,
       title: "AI DATA EXTRACTION",
       imgSrc: DataExtraction,
-      description: "We use AI to optimize image and text acquisition through scanning, drone photography, archival negotiation, and partnerships with corporations, religious groups, and governments",
+      description:
+        "We use AI to optimize image and text acquisition through scanning, drone photography, archival negotiation, and partnerships with corporations, religious groups, and governments",
     },
     {
       id: 2,
       title: "Machine Learning Enablement",
       imgSrc: MachineLearning,
-      description: "Our flexible data solutions support all ML systems, from simple data to deep learning.",
+      description:
+        "Our flexible data solutions support all ML systems, from simple data to deep learning.",
     },
     {
       id: 3,
-      title: "Ai Enabled Customer Service",
+      title: "AI Enabled Customer Service",
       imgSrc: Customer,
-      description: "REACT JS/TAILWIND CSS/.NET DapperAI-driven customer service delivers fast, personalized experiences that boost engagement.",
+      description:
+        "AI-driven customer service delivers fast, personalized experiences that boost engagement.",
     },
     {
-      id: 3,
+      id: 4,
       title: "Genealogy",
       imgSrc: Genealogy,
-      description: "AI-powered Lifewood preserves and digitizes records at scale, unlocking histories in any language or condition.",
+      description:
+        "AI-powered Lifewood preserves and digitizes records at scale, unlocking histories in any language or condition.",
     },
     {
-      id: 3,
+      id: 5,
       title: "Natural Language Processing",
       imgSrc: Natural,
-      description: "We partner with top NLP companies and provide solutions in 50+ languages with a global workforce.",
+      description:
+        "We partner with top NLP companies and provide solutions in 50+ languages with a global workforce.",
     },
     {
-      id: 3,
+      id: 6,
       title: "Computer Vision",
       imgSrc: Computer,
-      description: "Lifewood delivers complete data solutions for CV, from collection to annotation, ensuring high-quality training data.",
+      description:
+        "Lifewood delivers complete data solutions for CV, from collection to annotation, ensuring high-quality training data.",
     },
-        {
-      id: 3,
+    {
+      id: 7,
       title: "Autonomous Driving Technology",
-      imgSrc: Driving ,
-      description: "Lifewood fuels innovation, advancing Autonomous Driving Technology.",
+      imgSrc: Driving,
+      description:
+        "Lifewood fuels innovation, advancing Autonomous Driving Technology.",
     },
-    // Add more items as needed
   ];
-
-  // Animation for h1
-  const [refH1, inViewH1] = useInView({
-    triggerOnce: true,
-    threshold: 1, // 100% in view
-  });
-
-  const h1Spring = useSpring({
-    opacity: inViewH1 ? 1 : 0,
-    transform: inViewH1 ? "scale(1)" : "scale(0.5)",
-    config: { tension: 250, friction: 20 },
-  });
-
-  // Animation for span
-  const [refSpan, inViewSpan] = useInView({
-    triggerOnce: true,
-    threshold: 1, // 100% in view
-  });
-
-  const spanSpring = useSpring({
-    opacity: inViewSpan ? 1 : 0,
-    transform: inViewSpan ? "scale(1)" : "scale(0.5)",
-    config: { tension: 250, friction: 20 },
-  });
 
   return (
     <div className="relative bg-header-yellow font-kanit h-auto py-8">
       <div className="text-center mb-8 mx-1.5 lg:pb-[80px]">
-    
-        <animated.h1
-          ref={refH1}
-          style={h1Spring}
-          className="text-5xl text-black font-bold md:text-7xl md:pt-[100px] lg:text-9xl"
-        >
+        <h1 className="text-5xl text-black font-bold md:text-7xl md:pt-[100px] lg:text-9xl">
           PROJECTS
-        </animated.h1>
+        </h1>
         <div className="mt-3 md:mt-6 lg:mt-10">
-          <animated.span
-            ref={refSpan}
-            style={spanSpring}
-            className="text-2xl text-black font-bold md:text-4xl lg:text-6xl mt-7"
-          >
+          <span className="text-2xl text-black font-bold md:text-4xl lg:text-6xl mt-7">
             Discover what our AI Data Services have accomplished
-          </animated.span>
+          </span>
         </div>
       </div>
 
@@ -111,7 +82,6 @@ export default function Portfolio() {
             title={item.title}
             imgSrc={item.imgSrc}
             description={item.description}
-            index={index}
           />
         ))}
       </div>
@@ -119,7 +89,7 @@ export default function Portfolio() {
   );
 }
 
-function PortfolioItem({ title, imgSrc, description, index }) {
+function PortfolioItem({ title, imgSrc, description }) {
   const { ref, inView } = useInView({
     triggerOnce: true,
     threshold: 0.5,
@@ -127,25 +97,29 @@ function PortfolioItem({ title, imgSrc, description, index }) {
 
   const animation = useSpring({
     opacity: inView ? 1 : 0,
-    transform: inView ? "scale(1)" : "scale(0.7)",
+    transform: inView ? "scale(1)" : "scale(0.9)",
     config: { tension: 200, friction: 15 },
-    delay: index * 200,
   });
-
   return (
     <animated.div
       ref={ref}
       style={animation}
-      className="border-[4px] border-black rounded-md overflow-hidden h-96 lg:border-[4px]"
+      className="rounded-2xl shadow-lg overflow-hidden bg-white transform transition duration-300 hover:scale-[1.02]"
     >
-      <div className="h-[60%]">
-        <img src={imgSrc} alt={title} className="w-full h-full object-cover" />
+      {/* Image with hover overlay */}
+      <div className="relative h-80 md:h-64">
+        <img src={imgSrc} alt={title} className="w-full h-full object-cover rounded-t-2xl" />
+        <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300">
+          <button className="bg-white text-black px-4 py-2 text-sm font-semibold rounded-md shadow-md hover:bg-gray-300 transition">
+            Read More
+          </button>
+        </div>
       </div>
-      <div className="h-[40%] flex flex-col items-center justify-center bg-[#1D1D1D] text-white p-4">
-        <h1 className="text-lg md:text-2xl lg:text-3xl font-bold mb-2">
-          {title}
-        </h1>
-        <span className="text-sm md:text-lg lg:text-xl">{description}</span>
+
+      {/* Content */}
+      <div className="p-4 md:p-6 text-center">
+        <h1 className="text-3xl md:text-xl font-bold text-gray-900 mb-2">{title}</h1>
+        <p className="text-sm md:text-base text-gray-700 leading-relaxed">{description}</p>
       </div>
     </animated.div>
   );
