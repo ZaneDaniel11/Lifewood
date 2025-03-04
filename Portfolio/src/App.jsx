@@ -5,7 +5,7 @@ import StockTicker from "./Components/Infinitescroll";
 import Portfolio from "./Portfolio";
 import Technology from "./Technology";
 import LoadingScreen from "./Loading";
-import Admin from "./Admin"; // Ensure this is the Admin Dashboard component
+import AdminDashboard from "./AdminSide/AdminDashboard";
 import Github from "./SocialsGithub/Github";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 
@@ -19,14 +19,14 @@ function App() {
       ) : (
         <Routes>
           <Route path="/" element={<MainApp />} />
-          <Route path="/admin" element={<Admin />} />
+          <Route path="/admin" element={<AdminDashboard />} />
         </Routes>
       )}
     </Router>
   );
 }
 
-// Extract main components into a separate component
+// Extracted main components
 function MainApp() {
   return (
     <>
