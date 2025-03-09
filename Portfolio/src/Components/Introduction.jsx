@@ -15,9 +15,9 @@ export default function Introduction() {
     degree: "",
     jobExperience: "",
     email: "",
-    message: ""
+    message: "",
+    file: null, // New field for file
   });
-
   // Apply Now Button Animations
   const [helloSpring, setHelloSpring] = useSpring(() => ({
     opacity: 0,
@@ -85,31 +85,51 @@ export default function Introduction() {
   
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    if (e.target.name === "file") {
+      // Handle file input separately
+      setFormData({ ...formData, file: e.target.files[0] });
+    } else {
+      setFormData({ ...formData, [e.target.name]: e.target.value });
+    }
   };
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const templateParams = {
-      to_name: "Hiring Team",
-      from_name: formData.fullName,
-      age: formData.age,
-      degree: formData.degree,
-      job_experience: formData.jobExperience,
-      from_email: formData.email,
-      message: formData.message
+    if (!formData.file) {
+      alert("Please select a file to upload.");
+      return;
+    }
+
+    // Convert file to Base64
+    const reader = new FileReader();
+    reader.readAsDataURL(formData.file);
+    reader.onloadend = () => {
+      const base64File = reader.result.split(",")[1]; // Extract Base64 data
+
+      const templateParams = {
+        to_name: "Hiring Team",
+        from_name: formData.fullName,
+        age: formData.age,
+        degree: formData.degree,
+        job_experience: formData.jobExperience,
+        from_email: formData.email,
+        message: formData.message,
+        attachment: base64File, // Attach Base64 file
+        fileName: formData.file.name, // File name
+      };
+
+      emailjs
+        .send("service_y55bw9l", "template_nb605xl", templateParams, "0LlVOg8BMb3Vq5Wuf")
+        .then((response) => {
+          console.log("Email sent successfully", response);
+          alert("Application submitted successfully!");
+          setIsModalOpen(false);
+        })
+        .catch((error) => console.log("Error sending email", error));
     };
-
-    emailjs.send("service_xxx", "template_nb605xl", templateParams, "your_user_id")
-      .then(response => {
-        console.log("Email sent successfully", response);
-        alert("Application submitted successfully!");
-        setIsModalOpen(false);
-      })
-      .catch(error => console.log("Error sending email", error));
   };
-
 
   useEffect(() => {
     setTimeout(() => setHelloSpring({ opacity: 1, transform: "scale(1)" }), 200);
@@ -164,18 +184,22 @@ export default function Introduction() {
 
 {isModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 px-4">
-          <animated.div style={modalAnimation} className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full relative">
-            <button className="absolute top-4 right-4 text-gray-600 hover:text-gray-900 text-2xl" onClick={() => setIsModalOpen(false)}>
+          <animated.div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full relative">
+            <button className="absolute top-4 right-4" onClick={() => setIsModalOpen(false)}>
               &times;
             </button>
             <h2 className="text-2xl font-bold mb-4 text-center">Job Application</h2>
             <form onSubmit={handleSubmit} className="space-y-4">
-              <input type="text" name="fullName" placeholder="Full Name" value={formData.fullName} onChange={handleChange} className="w-full p-3 border rounded-md" required />
-              <input type="number" name="age" placeholder="Age" value={formData.age} onChange={handleChange} className="w-full p-3 border rounded-md" required />
-              <input type="text" name="degree" placeholder="Degree" value={formData.degree} onChange={handleChange} className="w-full p-3 border rounded-md" required />
-              <input type="text" name="jobExperience" placeholder="Relevant Job Experience" value={formData.jobExperience} onChange={handleChange} className="w-full p-3 border rounded-md" required />
-              <input type="email" name="email" placeholder="Email" value={formData.email} onChange={handleChange} className="w-full p-3 border rounded-md" required />
-              <textarea name="message" placeholder="Message (Optional)" value={formData.message} onChange={handleChange} className="w-full p-3 border rounded-md"></textarea>
+              <input type="text" name="fullName" placeholder="Full Name" onChange={handleChange} className="w-full p-3 border rounded-md" required />
+              <input type="number" name="age" placeholder="Age" onChange={handleChange} className="w-full p-3 border rounded-md" required />
+              <input type="text" name="degree" placeholder="Degree" onChange={handleChange} className="w-full p-3 border rounded-md" required />
+              <input type="text" name="jobExperience" placeholder="Relevant Job Experience" onChange={handleChange} className="w-full p-3 border rounded-md" required />
+              <input type="email" name="email" placeholder="Email" onChange={handleChange} className="w-full p-3 border rounded-md" required />
+              <textarea name="message" placeholder="Message (Optional)" onChange={handleChange} className="w-full p-3 border rounded-md"></textarea>
+
+              {/* File Upload Field */}
+              <input type="file" name="file" onChange={handleChange} className="w-full p-3 border rounded-md" required />
+
               <button type="submit" className="w-full bg-[#60A805] text-white p-3 rounded-md hover:bg-[#4E8700]">
                 Submit Application
               </button>
@@ -183,7 +207,6 @@ export default function Introduction() {
           </animated.div>
         </div>
       )}
-
     </div>
   );
 }
