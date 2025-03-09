@@ -48,7 +48,7 @@ export default function Technology() {
         </animated.span>
       </div>
 
-      <div className="grid grid-cols-1 mx-1.5 md:grid-cols-2 md:pb-[120px] lg:grid-cols-3 gap-6 mt-10 p-8 font-kanit font-bold text-2xl">
+      <div className="text-xl grid grid-cols-1 mx-1.5 md:grid-cols-2 md:pb-[120px] lg:grid-cols-3 gap-6 mt-10 p-8 font-kanit font-bold text-2xl">
         {techList.map((tech, index) => (
           <TechItem key={index} icon={tech.icon} label={tech.label} index={index} />
         ))}

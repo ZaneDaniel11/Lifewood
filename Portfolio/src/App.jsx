@@ -9,6 +9,8 @@ const StockTicker = lazy(() => import("./Components/Infinitescroll"));
 const Portfolio = lazy(() => import("./Portfolio"));
 const Technology = lazy(() => import("./Technology"));
 const AdminDashboard = lazy(() => import("./AdminSide/AdminDashboard"));
+const Footer = lazy(() => import("./Components/Footer"));
+
 
 
 
@@ -38,6 +40,8 @@ function MainApp() {
       <ErrorBoundary><Technology /></ErrorBoundary>
       <ErrorBoundary><StockTicker /></ErrorBoundary>
       <ErrorBoundary><Portfolio /></ErrorBoundary>
+      <ErrorBoundary><Footer /></ErrorBoundary>
+
     </Suspense>
   );
 }
