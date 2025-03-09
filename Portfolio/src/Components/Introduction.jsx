@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSpring, animated } from "@react-spring/web";
 import profilePic from "../assets/proz.gif";
+import emailjs from "emailjs-com";
 
 import "../CSS/Introduction.css";
 
