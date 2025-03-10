@@ -93,43 +93,77 @@ export default function Introduction() {
     }
   };
 
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     if (!formData.file) {
       alert("Please select a file to upload.");
       return;
     }
-
+  
     // Convert file to Base64
     const reader = new FileReader();
     reader.readAsDataURL(formData.file);
-    reader.onloadend = () => {
+    reader.onloadend = async () => {
       const base64File = reader.result.split(",")[1]; // Extract Base64 data
-
-      const templateParams = {
-        to_name: "Hiring Team",
-        from_name: formData.fullName,
-        age: formData.age,
+  
+      const requestBody = {
+        id: 0, // Backend will handle actual ID assignment
+        fullName: formData.fullName,
+        age: parseInt(formData.age, 10), // Convert age to number
         degree: formData.degree,
-        job_experience: formData.jobExperience,
-        from_email: formData.email,
+        jobExperience: formData.jobExperience,
+        email: formData.email,
         message: formData.message,
-        attachment: base64File, // Attach Base64 file
-        fileName: formData.file.name, // File name
+        fileName: formData.file.name,
+        fileData: base64File,
+        submittedAt: new Date().toISOString(),
       };
-
-      emailjs
-        .send("service_y55bw9l", "template_nb605xl", templateParams, "0LlVOg8BMb3Vq5Wuf")
-        .then((response) => {
-          console.log("Email sent successfully", response);
-          alert("Application submitted successfully!");
-          setIsModalOpen(false);
-        })
-        .catch((error) => console.log("Error sending email", error));
+  
+      try {
+        // Submit to the backend
+        const backendResponse = await fetch("http://localhost:5237/api/ApplicationsApi/InsertApplication", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(requestBody),
+        });
+  
+        if (!backendResponse.ok) {
+          throw new Error("Failed to submit application to the backend.");
+        }
+  
+        console.log("Application submitted to backend successfully.");
+  
+        // Send email using EmailJS (matching your template)
+        const templateParams = {
+          to_name: "Hiring Team",
+          from_name: formData.fullName,
+          age: formData.age,
+          degree: formData.degree,
+          job_experience: formData.jobExperience,
+          from_email: formData.email,
+          message: formData.message || "No message provided.",
+        };
+  
+        const emailResponse = await emailjs.send(
+          "service_y55bw9l", // Your service ID
+          "template_nb605xl", // Your template ID
+          templateParams,
+          "0LlVOg8BMb3Vq5Wuf" // Your public key
+        );
+  
+        console.log("Email sent successfully:", emailResponse);
+        alert("Application submitted successfully!");
+        setIsModalOpen(false);
+      } catch (error) {
+        console.error("Error submitting application:", error);
+        alert("Error submitting application. Please try again.");
+      }
     };
   };
+  
 
   useEffect(() => {
     setTimeout(() => setHelloSpring({ opacity: 1, transform: "scale(1)" }), 200);
