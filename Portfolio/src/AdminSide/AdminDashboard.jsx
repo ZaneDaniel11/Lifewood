@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Menu, X, CheckCircle, XCircle, Clock, MoreVertical } from "lucide-react";
+import { ThumbsUp, ThumbsDown, Eye } from "lucide-react";
 import logo from "../assets/logo.svg";
 
 const Header = () => (
@@ -93,14 +94,17 @@ const Table = ({ applications }) => {
               >
                 {app.applicationStatus}
               </td>
-              <td className="p-2 md:p-4 flex gap-1 md:gap-2 flex-wrap">
-                <button className="bg-green-500 text-white px-2 py-1 md:px-4 md:py-2 rounded">
-                  Accept
-                </button>
-                <button className="bg-red-500 text-white px-2 py-1 md:px-4 md:py-2 rounded">
-                  Decline
-                </button>
-              </td>
+           <td className="p-2 md:p-4 flex gap-2 items-center">
+              <button className="text-green-500 hover:text-green-700">
+                <CheckCircle size={20} />
+              </button>
+              <button className="text-red-500 hover:text-red-700">
+                <XCircle size={20} />
+              </button>
+              <button className="text-blue-500 hover:text-blue-700">
+                <Eye size={20} />
+              </button>
+            </td>
             </tr>
           ))}
         </tbody>
