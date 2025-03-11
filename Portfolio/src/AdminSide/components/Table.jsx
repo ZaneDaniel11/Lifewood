@@ -42,57 +42,64 @@ const Table = ({ applications }) => {
           </tr>
         </thead>
         <tbody>
-          {visibleData.map((app, index) => (
-            <tr
-              key={app.id}
-              className={`${
-                index % 2 === 0 ? "bg-gray-50" : "bg-white"
-              } hover:bg-gray-200 text-xs md:text-sm`}
-            >
-              <td className="p-2 md:p-4">{app.id}</td>
-              <td className="p-2 md:p-4 whitespace-nowrap overflow-hidden text-ellipsis max-w-[150px]">{app.fullName}</td>
-              <td className="p-2 md:p-4 whitespace-nowrap overflow-hidden text-ellipsis max-w-[150px]">{app.age}</td>
-              <td className="p-2 md:p-4 whitespace-nowrap overflow-hidden text-ellipsis max-w-[150px]">{app.degree}</td>
-              <td className="p-2 md:p-4 whitespace-nowrap overflow-hidden text-ellipsis max-w-[150px]">{app.jobExperience}</td>
-              <td className="p-2 md:p-4 whitespace-nowrap overflow-hidden text-ellipsis max-w-[150px]">{app.email}</td>
-              <td className="p-2 md:p-4 whitespace-nowrap overflow-hidden text-ellipsis max-w-[150px]">
-              <a 
-    href={app.downloadUrl || "#"} 
-    download 
-    className="text-blue-500 underline"
-  >
-    {app.fileName}
-  </a>
-</td>
+  {visibleData.map((app, index) => (
+    <tr
+      key={app.id}
+      className={`${
+        index % 2 === 0 ? "bg-gray-50" : "bg-white"
+      } hover:bg-gray-200 text-xs md:text-sm cursor-pointer`}
+      onClick={() => handleView(app)}
+    >
+      <td className="p-2 md:p-4">{app.id}</td>
+      <td className="p-2 md:p-4 whitespace-nowrap overflow-hidden text-ellipsis max-w-[150px]">{app.fullName}</td>
+      <td className="p-2 md:p-4">{app.age}</td>
+      <td className="p-2 md:p-4">{app.degree}</td>
+      <td className="p-2 md:p-4">{app.jobExperience}</td>
+      <td className="p-2 md:p-4">{app.email}</td>
+      <td 
+        className="p-2 md:p-4 whitespace-nowrap overflow-hidden text-ellipsis max-w-[150px]"
+        onClick={(e) => e.stopPropagation()} // Prevents modal from opening when clicking resume
+      >
+        <a 
+          href={app.downloadUrl || "#"} 
+          download 
+          className="text-blue-500 underline"
+        >
+          {app.fileName}
+        </a>
+      </td>
+      <td
+        className={`p-2 md:p-4 font-semibold ${
+          app.applicationStatus === "Accepted"
+            ? "text-green-600"
+            : app.applicationStatus === "Rejected"
+            ? "text-red-600"
+            : "text-yellow-600"
+        }`}
+      >
+        {app.applicationStatus}
+      </td>
+      <td 
+        className="p-2 md:p-4 flex gap-2 items-center"
+        onClick={(e) => e.stopPropagation()} // Prevents modal from opening when clicking actions
+      >
+        <button className="text-green-500 hover:text-green-700">
+          <CheckCircle size={20} />
+        </button>
+        <button className="text-red-500 hover:text-red-700">
+          <XCircle size={20} />
+        </button>
+        <button
+          className="text-blue-500 hover:text-blue-700"
+          onClick={() => handleView(app)}
+        >
+          <Eye size={20} />
+        </button>
+      </td>
+    </tr>
+  ))}
+</tbody>
 
-              <td
-                className={`p-2 md:p-4 font-semibold ${
-                  app.applicationStatus === "Accepted"
-                    ? "text-green-600"
-                    : app.applicationStatus === "Rejected"
-                    ? "text-red-600"
-                    : "text-yellow-600"
-                }`}
-              >
-                {app.applicationStatus}
-              </td>
-              <td className="p-2 md:p-4 flex gap-2 items-center">
-                <button className="text-green-500 hover:text-green-700">
-                  <CheckCircle size={20} />
-                </button>
-                <button className="text-red-500 hover:text-red-700">
-                  <XCircle size={20} />
-                </button>
-                <button
-                  className="text-blue-500 hover:text-blue-700"
-                  onClick={() => handleView(app)}
-                >
-                  <Eye size={20} />
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
       </table>
 
       {/* Pagination Controls */}
