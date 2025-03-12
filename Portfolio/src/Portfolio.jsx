@@ -82,6 +82,7 @@ export default function Portfolio() {
             title={item.title}
             imgSrc={item.imgSrc}
             description={item.description}
+            index={index}
           />
         ))}
       </div>
@@ -89,17 +90,19 @@ export default function Portfolio() {
   );
 }
 
-function PortfolioItem({ title, imgSrc, description }) {
+function PortfolioItem({ title, imgSrc, description, index }) {
   const { ref, inView } = useInView({
     triggerOnce: true,
-    threshold: 0.5,
+    threshold: 0.3,
   });
 
   const animation = useSpring({
     opacity: inView ? 1 : 0,
-    transform: inView ? "scale(1)" : "scale(0.9)",
-    config: { tension: 200, friction: 15 },
+    transform: inView ? "translateY(0px)" : "translateY(50px)",
+    config: { tension: 200, friction: 20 },
+    delay: inView ? index * 200 : 0, // Staggered delay
   });
+
   return (
     <animated.div
       ref={ref}

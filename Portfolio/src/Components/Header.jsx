@@ -6,18 +6,18 @@ export default function Headers() {
 
   return (
     <div className="bg-header-yellow font-kanit block mt-6">
-      <div className="flex justify-between items-center h-24 mx-5 md:mx-5 lg:mx-28">
+      <div className="flex justify-between items-center h-24 mx-5 md:mx-5 lg:mx-10">
         {/* Logo */}
         <div className="flex space-x-4 items-center">
-          <img src={zanelogo} alt="ink" className="h-8 md:h-10 lg:h-16" />
+          <img src={zanelogo} alt="ink" className="h-8 md:h-10 lg:h-12" />
         </div>
 
         {/* Desktop Navigation */}
-        <ul className="hidden md:flex items-center space-x-8 text-md md:text-lg lg:text-3xl font-semibold">
+        <ul className="hidden md:flex items-center space-x-8 text-md md:text-lg lg:text-2xl font-semibold">
           <li className="cursor-pointer hover:text-gray-700 transition duration-300 list-none">Service</li>
           <li className="cursor-pointer hover:text-gray-700 transition duration-300 list-none">Projects</li>
           <li className="list-none">
-            <button className="w-[180px] md:w-[180px] h-[50px] md:h-[55px] lg:h-[65px] bg-[#60A805] text-white text-md md:text-lg lg:text-2xl rounded-lg flex items-center justify-center shadow-md hover:bg-[#4e8704] transition duration-300">
+            <button className="w-[180px] md:w-[180px] h-[50px] md:h-[55px] lg:h-[55px] bg-[#60A805] text-white text-md md:text-lg lg:text-2xl rounded-lg flex items-center justify-center shadow-md hover:bg-[#4e8704] transition duration-300">
               Apply Now
             </button>
           </li>
