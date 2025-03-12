@@ -11,22 +11,22 @@ export default function Technology() {
     { icon: "fa-check-circle", label: "DATA VALIDATION" },
   ];
 
-  // Animation for h1
-  const [refH1, inViewH1] = useInView({ triggerOnce: true, threshold: 1 });
+  // Title Animation (h1)
+  const [refH1, inViewH1] = useInView({ triggerOnce: true, threshold: 0.8 });
 
   const h1Spring = useSpring({
     opacity: inViewH1 ? 1 : 0,
-    transform: inViewH1 ? "scale(1)" : "scale(0.5)",
-    config: { tension: 250, friction: 20 },
+    transform: inViewH1 ? "translateY(0px) scale(1)" : "translateY(50px) scale(0.9)",
+    config: { tension: 120, friction: 15 },
   });
 
-  // Animation for span
-  const [refSpan, inViewSpan] = useInView({ triggerOnce: true, threshold: 1 });
+  // Subtitle Animation (span)
+  const [refSpan, inViewSpan] = useInView({ triggerOnce: true, threshold: 0.8 });
 
   const spanSpring = useSpring({
     opacity: inViewSpan ? 1 : 0,
-    transform: inViewSpan ? "scale(1)" : "scale(0.5)",
-    config: { tension: 250, friction: 20 },
+    transform: inViewSpan ? "translateY(0px) scale(1)" : "translateY(30px) scale(0.95)",
+    config: { tension: 100, friction: 18 },
   });
 
   return (
@@ -58,27 +58,21 @@ export default function Technology() {
 }
 
 function TechItem({ icon, label, index }) {
-  const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.5 });
+  const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.4 });
 
   const animation = useSpring({
     opacity: inView ? 1 : 0,
-    transform: inView ? "scale(1)" : "scale(0.7)",
-    config: { tension: 200, friction: 15 },
+    transform: inView ? "translateY(0px) scale(1)" : "translateY(20px) scale(0.9)",
+    config: { tension: 150, friction: 20, mass: 1 },
     delay: index * 150,
-  });
-
-  const hoverEffect = useSpring({
-    transform: "scale(1)",
-    config: { tension: 300, friction: 15 },
-    from: { transform: "scale(1)" },
-    reset: true,
   });
 
   return (
     <animated.div
       ref={ref}
-      style={{ ...animation, ...hoverEffect }}
-      className="flex items-center justify-center border-2 border-gray-600 h-24 bg-gray-800 rounded-lg md:h-[130px] transition-transform duration-300 hover:scale-105"
+      style={animation}
+      className="flex items-center justify-center border-2 border-gray-600 h-24 bg-gray-800 rounded-lg md:h-[130px] 
+      transition-transform duration-500 ease-out hover:scale-105"
     >
       {/* Icon: 30% width in lg */}
       <div className="w-[30%] flex justify-center">
