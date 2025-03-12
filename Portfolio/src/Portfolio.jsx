@@ -65,7 +65,7 @@ export default function Portfolio() {
   return (
     <div className="relative bg-header-yellow font-kanit h-auto py-8">
       <div className="text-center mb-8 mx-1.5 lg:pb-[80px]">
-        <h1 className="text-5xl text-black font-bold md:text-7xl md:pt-[100px] lg:text-9xl">
+        <h1 className="text-5xl text-black font-bold md:text-7xl md:pt-[100px] lg:text-8xl">
           PROJECTS
         </h1>
         <div className="mt-3 md:mt-6 lg:mt-10">
