@@ -153,10 +153,10 @@ export default function Introduction() {
   };
 
   return (
-    <div className="block">
+    <div className="block md:h-[500px]">
        <ToastContainer />
-      <div className="mt-[20px] flex flex-col md:flex-row h-auto bg-body-yellow font-kanit items-center md:items-start justify-center md:justify-between space-y-8 md:space-y-0 md:space-x-8 px-4 py-6 md:py-10 lg:px-10 md:pt-[100px] md:pb-[100px] lg:pt-[130px] lg:pb-[170px]">
-        <div className="text-center md:text-left lg:ml-20">
+      <div className="mt-[20px] flex flex-col md:mt-0 md:flex-row h-auto bg-body-yellow font-kanit items-center md:items-start justify-center md:justify-between space-y-8 md:space-y-0 md:space-x-8 px-4 py-6 md:py-10 lg:px-10 md:pt-[30px] md:pb-[100px] lg:pt-[130px] lg:pb-[170px]">
+          <div className="text-center md:mt-[100px] md:text-left lg:ml-20">
           <animated.h1
             style={helloSpring}
             className="font-kanit text-7xl m-0 mb-4 font-bold text-black md:text-6xl lg:text-9xl"
@@ -165,7 +165,7 @@ export default function Introduction() {
           </animated.h1>
           <animated.p
             style={Namewhat}
-            className="text-3xl font-kanit text-white mb-2 font-bold md:text-4xl lg:text-6xl lg:mt-6"
+            className="text-3xl font-kanit text-white mb-2 font-bold md:text-2xl lg:text-6xl lg:mt-6"
           >
             {displayText}
             <span className="cursor"></span>
