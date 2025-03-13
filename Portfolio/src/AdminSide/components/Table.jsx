@@ -23,6 +23,12 @@ const Table = ({ applications }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isAcceptModalOpen, setIsAcceptModalOpen] = useState(false);
   const [message, setMessage] = useState("");
+  const [isRejectModalOpen, setIsRejectModalOpen] = useState(false); // 🔹 Add this state
+
+  const handleRejectClick = (application) => {
+    setSelectedApplication(application);
+    setIsRejectModalOpen(true);
+  };
 
   const itemsPerPage = 5;
   const totalPages = Math.ceil(applications.length / itemsPerPage);
@@ -88,6 +94,43 @@ const Table = ({ applications }) => {
     }
   };
 
+
+  const handleRejectSubmit = async () => {
+    if (!selectedApplication) return;
+  
+    try {
+      await axios.put(
+        `http://localhost:5237/api/ApplicationsApi/UpdateApplicationStatus`,
+        {},
+        {
+          params: {
+            id: selectedApplication.id,
+            status: "Rejected",
+          },
+        }
+      );
+  
+      const emailParams = {
+        email: selectedApplication.email || "default@example.com",
+        to_name: selectedApplication.fullName || "Applicant",
+        message: message || "Unfortunately, your application has been rejected.",
+      };
+  
+      await emailjs.send(
+        "service_y55bw9l",
+        "template_0ka69sc",
+        emailParams,
+        "0LlVOg8BMb3Vq5Wuf"
+      );
+  
+      alert("Application rejected and email sent.");
+      closeModal();
+    } catch (error) {
+      console.error("Error rejecting application:", error);
+      alert("Failed to reject application.");
+    }
+  };
+
   return (
     <div className="bg-white shadow-md rounded-lg overflow-x-auto w-full">
       <table className="w-full border-collapse text-black text-sm md:text-base">
@@ -147,9 +190,10 @@ const Table = ({ applications }) => {
         <button className="text-green-500" onClick={() => handleAcceptClick(app)}>
                   <CheckCircle size={20} />
                 </button>
-        <button className="text-red-500 hover:text-red-700">
+        <button className="text-red-500 hover:text-red-700" onClick={() => handleRejectClick(app)}>
           <XCircle size={20} />
         </button>
+
         <button
           className="text-blue-500 hover:text-blue-700"
           onClick={() => handleView(app)}
@@ -183,28 +227,54 @@ const Table = ({ applications }) => {
           Next
         </button>
       </div>
-      {isAcceptModalOpen && selectedApplication && (
-        <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
-            <h2 className="text-xl font-bold mb-4">Accept Application</h2>
-            <p className="mb-2">Send a message to the applicant:</p>
-            <textarea
-              className="w-full p-2 border rounded-md"
-              placeholder="Enter your message..."
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-            />
-            <div className="flex justify-end mt-4 gap-2">
-              <button onClick={closeModal} className="px-4 py-2 bg-gray-500 text-white rounded-md">
-                Cancel
-              </button>
-              <button onClick={handleSubmit} className="px-4 py-2 bg-green-500 text-white rounded-md">
-                <FontAwesomeIcon icon={faPaperPlane} /> Submit
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+{isAcceptModalOpen && selectedApplication && (
+  <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center p-4 z-[1000]">
+    <div className="bg-white p-6 rounded-2xl shadow-2xl w-full max-w-md border-t-4 border-green-500">
+      
+      {/* Modal Header */}
+      <div className="flex items-center justify-between border-b pb-4 mb-4">
+        <h2 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
+          <FontAwesomeIcon icon={faCheckCircle} className="text-green-500" />
+          Accept Application
+        </h2>
+        <button
+          onClick={closeModal}
+          className="text-gray-500 hover:text-red-600 transition text-lg"
+        >
+          ✖
+        </button>
+      </div>
+
+      {/* Message Input */}
+      <p className="text-gray-700 mb-2">Send a message to the applicant:</p>
+      <textarea
+        className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-400 focus:outline-none resize-none"
+        placeholder="Enter your message..."
+        rows="4"
+        value={message}
+        onChange={(e) => setMessage(e.target.value)}
+      />
+
+      {/* Buttons */}
+      <div className="flex justify-end mt-6 gap-3">
+        <button 
+          onClick={closeModal} 
+          className="px-4 py-2 rounded-lg bg-gray-500 text-white hover:bg-gray-600 transition"
+        >
+          Cancel
+        </button>
+        <button 
+          onClick={handleSubmit} 
+          className="px-4 py-2 rounded-lg bg-green-500 text-white hover:bg-green-600 transition flex items-center gap-2"
+        >
+          <FontAwesomeIcon icon={faPaperPlane} />
+          Submit
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+
    {/* Modal for Application Details */}
 {isModalOpen && selectedApplication && (
   <div className="fixed inset-0 bg-black bg-opacity-60 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-fadeIn">
@@ -302,6 +372,54 @@ const Table = ({ applications }) => {
         >
           <FontAwesomeIcon icon={faTimesCircle} />
           Close
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+
+{isRejectModalOpen && selectedApplication && (
+  <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center p-4 z-[1000]">
+    <div className="bg-white p-6 rounded-2xl shadow-2xl w-full max-w-md border-t-4 border-red-500">
+      
+      {/* Modal Header */}
+      <div className="flex items-center justify-between border-b pb-4 mb-4">
+        <h2 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
+          <FontAwesomeIcon icon={faTimesCircle} className="text-red-500" />
+          Reject Application
+        </h2>
+        <button
+          onClick={closeModal}
+          className="text-gray-500 hover:text-red-600 transition text-lg"
+        >
+          ✖
+        </button>
+      </div>
+
+      {/* Message Input */}
+      <p className="text-gray-700 mb-2">Send a message to inform the applicant:</p>
+      <textarea
+        className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-400 focus:outline-none resize-none"
+        placeholder="Enter your message..."
+        rows="4"
+        value={message}
+        onChange={(e) => setMessage(e.target.value)}
+      />
+
+      {/* Buttons */}
+      <div className="flex justify-end mt-6 gap-3">
+        <button 
+          onClick={closeModal} 
+          className="px-4 py-2 rounded-lg bg-gray-500 text-white hover:bg-gray-600 transition"
+        >
+          Cancel
+        </button>
+        <button 
+          onClick={handleRejectSubmit} 
+          className="px-4 py-2 rounded-lg bg-red-500 text-white hover:bg-red-600 transition flex items-center gap-2"
+        >
+          <FontAwesomeIcon icon={faPaperPlane} />
+          Submit
         </button>
       </div>
     </div>
