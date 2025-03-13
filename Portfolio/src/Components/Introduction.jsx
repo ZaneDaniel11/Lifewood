@@ -3,6 +3,7 @@ import { useSpring, animated } from "@react-spring/web";
 import profilePic from "../assets/proz.gif";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import emailjs from "emailjs-com";
 
 import "../CSS/Introduction.css";
 
@@ -114,16 +115,17 @@ export default function Introduction() {
       return;
     }
 
-    const submissionData = new FormData();
-    submissionData.append("fullName", formData.fullName);
-    submissionData.append("age", formData.age);
-    submissionData.append("degree", formData.degree);
-    submissionData.append("jobExperience", formData.jobExperience);
-    submissionData.append("email", formData.email);
-    submissionData.append("message", formData.message);
-    submissionData.append("file", formData.file);
-
     try {
+      // Send application to the backend
+      const submissionData = new FormData();
+      submissionData.append("fullName", formData.fullName);
+      submissionData.append("age", formData.age);
+      submissionData.append("degree", formData.degree);
+      submissionData.append("jobExperience", formData.jobExperience);
+      submissionData.append("email", formData.email);
+      submissionData.append("message", formData.message);
+      submissionData.append("file", formData.file);
+
       const response = await fetch("http://localhost:5237/api/ApplicationsApi/InsertApplication", {
         method: "POST",
         body: submissionData,
@@ -133,6 +135,24 @@ export default function Introduction() {
         throw new Error("Failed to submit application.");
       }
 
+      // Send Email using Email.js
+      const emailParams = {
+        to_name: "Lifewood Hiring Team",
+        from_name: formData.fullName,
+        age: formData.age,
+        degree: formData.degree,
+        job_experience: formData.jobExperience,
+        from_email: formData.email,
+        message: formData.message,
+      };
+
+      await emailjs.send(
+        "service_y55bw9l", // Replace with your Email.js service ID
+        "template_nb605xl", // Replace with your Email.js template ID
+        emailParams,
+        "0LlVOg8BMb3Vq5Wuf" // Replace with your Email.js user ID
+      );
+
       toast.success("✅ Application submitted successfully!", {
         position: "top-center",
         autoClose: 2500,
@@ -140,8 +160,15 @@ export default function Introduction() {
       });
 
       setIsModalOpen(false);
-      setFormData({ fullName: "", age: "", degree: "", jobExperience: "", email: "", message: "", file: null });
-
+      setFormData({
+        fullName: "",
+        age: "",
+        degree: "",
+        jobExperience: "",
+        email: "",
+        message: "",
+        file: null,
+      });
     } catch (error) {
       console.error("Error submitting application:", error);
       toast.error("❌ Error submitting application. Please try again.", {
@@ -151,6 +178,7 @@ export default function Introduction() {
       });
     }
   };
+
 
   return (
     <div className="block md:h-[500px] lg:h-[700px]">

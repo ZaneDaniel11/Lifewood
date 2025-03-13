@@ -1,13 +1,27 @@
 import React, { useState } from "react";
 import { CheckCircle, XCircle, Eye } from "lucide-react";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faIdBadge, faUser, faCalendar, faGraduationCap, faBriefcase, faEnvelope, faFileAlt, faCheckCircle, faTimesCircle, faClock } from '@fortawesome/free-solid-svg-icons';
-
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faIdBadge,
+  faUser,
+  faCalendar,
+  faGraduationCap,
+  faBriefcase,
+  faEnvelope,
+  faFileAlt,
+  faCheckCircle,
+  faTimesCircle,
+  faClock,
+  faPaperPlane,
+} from "@fortawesome/free-solid-svg-icons";
+import axios from "axios";
 
 const Table = ({ applications }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedApplication, setSelectedApplication] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isAcceptModalOpen, setIsAcceptModalOpen] = useState(false);
+  const [message, setMessage] = useState("");
 
   const itemsPerPage = 5;
   const totalPages = Math.ceil(applications.length / itemsPerPage);
@@ -16,15 +30,53 @@ const Table = ({ applications }) => {
 
   const handleNext = () => setCurrentPage((prev) => Math.min(prev + 1, totalPages));
   const handlePrev = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
-
   const handleView = (application) => {
     setSelectedApplication(application);
     setIsModalOpen(true);
   };
 
+  const handleAcceptClick = (application) => {
+    setSelectedApplication(application);
+    setIsAcceptModalOpen(true);
+  };
+
   const closeModal = () => {
     setSelectedApplication(null);
     setIsModalOpen(false);
+    setIsAcceptModalOpen(false);
+    setMessage("");
+  };
+  const handleSubmit = async () => {
+    if (!selectedApplication) return;
+
+    try {
+      await axios.put(
+        `http://localhost:5237/api/ApplicationsApi/UpdateApplicationStatus`,
+        {},
+        {
+          params: {
+            id: selectedApplication.id,
+            status: "Accepted",
+          },
+        }
+      );
+
+      await axios.post("https://api.emailjs.com/api/v1.0/email/send", {
+        service_id: "your_service_id",
+        template_id: "your_template_id",
+        user_id: "your_user_id",
+        template_params: {
+          to_email: selectedApplication.email,
+          message,
+        },
+      });
+
+      alert("Application status updated and email sent successfully!");
+      closeModal();
+    } catch (error) {
+      console.error("Error updating status: ", error);
+      alert("Failed to update application status.");
+    }
   };
 
   return (
@@ -83,9 +135,9 @@ const Table = ({ applications }) => {
         className="p-2 md:p-4 flex gap-2 items-center"
         onClick={(e) => e.stopPropagation()} // Prevents modal from opening when clicking actions
       >
-        <button className="text-green-500 hover:text-green-700">
-          <CheckCircle size={20} />
-        </button>
+        <button className="text-green-500" onClick={() => handleAcceptClick(app)}>
+                  <CheckCircle size={20} />
+                </button>
         <button className="text-red-500 hover:text-red-700">
           <XCircle size={20} />
         </button>
@@ -122,7 +174,28 @@ const Table = ({ applications }) => {
           Next
         </button>
       </div>
-
+      {isAcceptModalOpen && selectedApplication && (
+        <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
+            <h2 className="text-xl font-bold mb-4">Accept Application</h2>
+            <p className="mb-2">Send a message to the applicant:</p>
+            <textarea
+              className="w-full p-2 border rounded-md"
+              placeholder="Enter your message..."
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+            />
+            <div className="flex justify-end mt-4 gap-2">
+              <button onClick={closeModal} className="px-4 py-2 bg-gray-500 text-white rounded-md">
+                Cancel
+              </button>
+              <button onClick={handleSubmit} className="px-4 py-2 bg-green-500 text-white rounded-md">
+                <FontAwesomeIcon icon={faPaperPlane} /> Submit
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
    {/* Modal for Application Details */}
 {isModalOpen && selectedApplication && (
   <div className="fixed inset-0 bg-black bg-opacity-60 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-fadeIn">
