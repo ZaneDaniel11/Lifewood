@@ -17,7 +17,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 
-const Table = ({ applications }) => {
+const Table = ({ applications,setApplications}) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedApplication, setSelectedApplication] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -51,11 +51,13 @@ const Table = ({ applications }) => {
     setSelectedApplication(null);
     setIsModalOpen(false);
     setIsAcceptModalOpen(false);
+    setIsRejectModalOpen(false);  // 🔹 Ensure reject modal closes
     setMessage("");
   };
+  
   const handleSubmit = async () => {
     if (!selectedApplication) return;
-
+  
     try {
       await axios.put(
         `http://localhost:5237/api/ApplicationsApi/UpdateApplicationStatus`,
@@ -67,25 +69,27 @@ const Table = ({ applications }) => {
           },
         }
       );
-
-
+  
+      // Update the application status in the frontend state
+      setApplications((prevApplications) =>
+        prevApplications.map((app) =>
+          app.id === selectedApplication.id ? { ...app, applicationStatus: "Accepted" } : app
+        )
+      );
+  
       const emailParams = {
-        email: selectedApplication.email || "default@example.com", // Ensure it’s not undefined
+        email: selectedApplication.email || "default@example.com",
         to_name: selectedApplication.fullName || "Applicant",
         message: message || "Your application has been accepted!",
       };
-      
-
+  
       await emailjs.send(
         "service_y55bw9l",
         "template_0ka69sc",
         emailParams,
         "0LlVOg8BMb3Vq5Wuf"
       );
-      
-      alert("Application status updated and email sent successfully!");
-      closeModal();
-
+  
       alert("Application status updated and email sent successfully!");
       closeModal();
     } catch (error) {
@@ -93,8 +97,7 @@ const Table = ({ applications }) => {
       alert("Failed to update application status.");
     }
   };
-
-
+  
   const handleRejectSubmit = async () => {
     if (!selectedApplication) return;
   
@@ -110,17 +113,10 @@ const Table = ({ applications }) => {
         }
       );
   
-      const emailParams = {
-        email: selectedApplication.email || "default@example.com",
-        to_name: selectedApplication.fullName || "Applicant",
-        message: message || "Unfortunately, your application has been rejected.",
-      };
-  
-      await emailjs.send(
-        "service_y55bw9l",
-        "template_0ka69sc",
-        emailParams,
-        "0LlVOg8BMb3Vq5Wuf"
+      setApplications((prevApplications) =>
+        prevApplications.map((app) =>
+          app.id === selectedApplication.id ? { ...app, applicationStatus: "Rejected" } : app
+        )
       );
   
       alert("Application rejected and email sent.");
@@ -130,6 +126,41 @@ const Table = ({ applications }) => {
       alert("Failed to reject application.");
     }
   };
+  // const handleRejectSubmit = async () => {
+  //   if (!selectedApplication) return;
+  
+  //   try {
+  //     await axios.put(
+  //       `http://localhost:5237/api/ApplicationsApi/UpdateApplicationStatus`,
+  //       {},
+  //       {
+  //         params: {
+  //           id: selectedApplication.id,
+  //           status: "Rejected",
+  //         },
+  //       }
+  //     );
+  
+  //     // const emailParams = {
+  //     //   email: selectedApplication.email || "default@example.com",
+  //     //   to_name: selectedApplication.fullName || "Applicant",
+  //     //   message: message || "Unfortunately, your application has been rejected.",
+  //     // };
+  
+  //     // await emailjs.send(
+  //     //   "service_y55bw9l",
+  //     //   "template_0ka69sc",
+  //     //   emailParams,
+  //     //   "0LlVOg8BMb3Vq5Wuf"
+  //     // );
+  
+  //     alert("Application rejected and email sent.");
+  //     closeModal();
+  //   } catch (error) {
+  //     console.error("Error rejecting application:", error);
+  //     alert("Failed to reject application.");
+  //   }
+  // };
 
   return (
     <div className="bg-white shadow-md rounded-lg overflow-x-auto w-full">

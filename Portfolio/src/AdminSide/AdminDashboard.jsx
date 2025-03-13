@@ -8,6 +8,15 @@ import Table from "./components/Table";
 export default function AdminDashboard() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [applications, setApplications] = useState([]);
+  const [selectedStatus, setSelectedStatus] = useState("All");
+
+  const handleStatusClick = (status) => {
+    setSelectedStatus(status);
+  };
+  const filteredApplications = applications.filter((applicant) => 
+    selectedStatus === "All" || applicant.applicationStatus === selectedStatus
+  );
+  
 
   useEffect(() => {
     const fetchApplications = async () => {
@@ -41,17 +50,23 @@ export default function AdminDashboard() {
           </button>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
             {stats.map((stat) => (
-              <div key={stat.title} className="p-4 rounded-lg bg-gray-100 text-black flex items-center justify-between shadow-md w-full">
+              <button 
+                key={stat.title} 
+                onClick={() => handleStatusClick(stat.title)}
+                className={`p-4 rounded-lg text-black flex items-center justify-between shadow-md w-full ${
+                  selectedStatus === stat.title ? "bg-blue-300" : "bg-gray-100"
+                }`}
+              >
                 <div>
                   <h3 className="text-md font-semibold">{stat.title}</h3>
                   <p className="text-3xl font-bold">{stat.count}</p>
                 </div>
                 {stat.icon}
-              </div>
+              </button>
             ))}
           </div>
           <div className="flex-1 overflow-auto">
-            <Table applications={applications} />
+          <Table applications={filteredApplications} setApplications={setApplications} />
           </div>
         </main>
       </div>
