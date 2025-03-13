@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { CheckCircle, XCircle, Eye } from "lucide-react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import emailjs from "emailjs-com";
+import { ToastContainer, toast } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 import {
   faIdBadge,
   faUser,
@@ -17,13 +19,13 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 
-const Table = ({ applications,setApplications}) => {
+const Table = ({ applications, setApplications }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedApplication, setSelectedApplication] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isAcceptModalOpen, setIsAcceptModalOpen] = useState(false);
   const [message, setMessage] = useState("");
-  const [isRejectModalOpen, setIsRejectModalOpen] = useState(false); // 🔹 Add this state
+  const [isRejectModalOpen, setIsRejectModalOpen] = useState(false);
 
   const handleRejectClick = (application) => {
     setSelectedApplication(application);
@@ -51,13 +53,13 @@ const Table = ({ applications,setApplications}) => {
     setSelectedApplication(null);
     setIsModalOpen(false);
     setIsAcceptModalOpen(false);
-    setIsRejectModalOpen(false);  // 🔹 Ensure reject modal closes
+    setIsRejectModalOpen(false);
     setMessage("");
   };
-  
+
   const handleSubmit = async () => {
     if (!selectedApplication) return;
-  
+
     try {
       await axios.put(
         `http://localhost:5237/api/ApplicationsApi/UpdateApplicationStatus`,
@@ -69,38 +71,37 @@ const Table = ({ applications,setApplications}) => {
           },
         }
       );
-  
-      // Update the application status in the frontend state
+
       setApplications((prevApplications) =>
         prevApplications.map((app) =>
           app.id === selectedApplication.id ? { ...app, applicationStatus: "Accepted" } : app
         )
       );
-  
+
       const emailParams = {
         email: selectedApplication.email || "default@example.com",
         to_name: selectedApplication.fullName || "Applicant",
         message: message || "Your application has been accepted!",
       };
-  
+
       await emailjs.send(
         "service_y55bw9l",
         "template_0ka69sc",
         emailParams,
         "0LlVOg8BMb3Vq5Wuf"
       );
-  
-      alert("Application status updated and email sent successfully!");
+
+      toast.success("Application status updated and email sent successfully!");
       closeModal();
     } catch (error) {
       console.error("Error updating status: ", error);
-      alert("Failed to update application status.");
+      toast.error("Failed to update application status.");
     }
   };
-  
+
   const handleRejectSubmit = async () => {
     if (!selectedApplication) return;
-  
+
     try {
       await axios.put(
         `http://localhost:5237/api/ApplicationsApi/UpdateApplicationStatus`,
@@ -112,58 +113,24 @@ const Table = ({ applications,setApplications}) => {
           },
         }
       );
-  
+
       setApplications((prevApplications) =>
         prevApplications.map((app) =>
           app.id === selectedApplication.id ? { ...app, applicationStatus: "Rejected" } : app
         )
       );
-  
-      alert("Application rejected and email sent.");
+
+      toast.success("Application rejected and email sent.");
       closeModal();
     } catch (error) {
       console.error("Error rejecting application:", error);
-      alert("Failed to reject application.");
+      toast.error("Failed to reject application.");
     }
   };
-  // const handleRejectSubmit = async () => {
-  //   if (!selectedApplication) return;
-  
-  //   try {
-  //     await axios.put(
-  //       `http://localhost:5237/api/ApplicationsApi/UpdateApplicationStatus`,
-  //       {},
-  //       {
-  //         params: {
-  //           id: selectedApplication.id,
-  //           status: "Rejected",
-  //         },
-  //       }
-  //     );
-  
-  //     // const emailParams = {
-  //     //   email: selectedApplication.email || "default@example.com",
-  //     //   to_name: selectedApplication.fullName || "Applicant",
-  //     //   message: message || "Unfortunately, your application has been rejected.",
-  //     // };
-  
-  //     // await emailjs.send(
-  //     //   "service_y55bw9l",
-  //     //   "template_0ka69sc",
-  //     //   emailParams,
-  //     //   "0LlVOg8BMb3Vq5Wuf"
-  //     // );
-  
-  //     alert("Application rejected and email sent.");
-  //     closeModal();
-  //   } catch (error) {
-  //     console.error("Error rejecting application:", error);
-  //     alert("Failed to reject application.");
-  //   }
-  // };
 
   return (
     <div className="bg-white shadow-md rounded-lg overflow-x-auto w-full">
+       <ToastContainer />
       <table className="w-full border-collapse text-black text-sm md:text-base">
         <thead className="bg-gray-100 text-black">
           <tr>
