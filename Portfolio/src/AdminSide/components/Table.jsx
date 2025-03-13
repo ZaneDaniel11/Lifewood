@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { CheckCircle, XCircle, Eye } from "lucide-react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import emailjs from "emailjs-com";
 import {
   faIdBadge,
   faUser,
@@ -61,15 +62,23 @@ const Table = ({ applications }) => {
         }
       );
 
-      await axios.post("https://api.emailjs.com/api/v1.0/email/send", {
-        service_id: "your_service_id",
-        template_id: "your_template_id",
-        user_id: "your_user_id",
-        template_params: {
-          to_email: selectedApplication.email,
-          message,
-        },
-      });
+
+      const emailParams = {
+        email: selectedApplication.email || "default@example.com", // Ensure it’s not undefined
+        to_name: selectedApplication.fullName || "Applicant",
+        message: message || "Your application has been accepted!",
+      };
+      
+
+      await emailjs.send(
+        "service_y55bw9l",
+        "template_0ka69sc",
+        emailParams,
+        "0LlVOg8BMb3Vq5Wuf"
+      );
+      
+      alert("Application status updated and email sent successfully!");
+      closeModal();
 
       alert("Application status updated and email sent successfully!");
       closeModal();
