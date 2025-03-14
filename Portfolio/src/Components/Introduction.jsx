@@ -4,6 +4,7 @@ import profilePic from "../assets/proz.gif";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import emailjs from "emailjs-com";
+import { useCreateApplicationMutation } from "../assets/services/HandleApplicationsApi";
 
 import "../CSS/Introduction.css";
 
@@ -18,6 +19,8 @@ export default function Introduction() {
     message: "",
     file: null,
   });
+  const [createApplication, { isLoading, isError, isSuccess }] = useCreateApplicationMutation();
+
   const [helloSpring, setHelloSpring] = useSpring(() => ({
     opacity: 0,
     transform: "scale(0.9)",
@@ -111,73 +114,60 @@ export default function Introduction() {
     e.preventDefault();
 
     if (!formData.file) {
-      toast.error("Please select a file to upload.");
-      return;
+        toast.error("Please select a file to upload.");
+        return;
     }
+
+    // Close modal immediately after clicking submit
+    setIsModalOpen(false);
 
     try {
-      // Send application to the backend
-      const submissionData = new FormData();
-      submissionData.append("fullName", formData.fullName);
-      submissionData.append("age", formData.age);
-      submissionData.append("degree", formData.degree);
-      submissionData.append("jobExperience", formData.jobExperience);
-      submissionData.append("email", formData.email);
-      submissionData.append("message", formData.message);
-      submissionData.append("file", formData.file);
+        const submissionData = new FormData();
+        submissionData.append("fullName", formData.fullName);
+        submissionData.append("age", formData.age);
+        submissionData.append("degree", formData.degree);
+        submissionData.append("jobExperience", formData.jobExperience);
+        submissionData.append("email", formData.email);
+        submissionData.append("message", formData.message);
+        submissionData.append("file", formData.file);
 
-      const response = await fetch("http://localhost:5237/api/ApplicationsApi/InsertApplication", {
-        method: "POST",
-        body: submissionData,
-      });
+        await createApplication(submissionData).unwrap();
 
-      if (!response.ok) {
-        throw new Error("Failed to submit application.");
-      }
+        // Send Email using Email.js
+        const emailParams = {
+            to_name: "Lifewood Hiring Team",
+            from_name: formData.fullName,
+            age: formData.age,
+            degree: formData.degree,
+            job_experience: formData.jobExperience,
+            from_email: formData.email,
+            message: formData.message,
+        };
 
-      // Send Email using Email.js
-      const emailParams = {
-        to_name: "Lifewood Hiring Team",
-        from_name: formData.fullName,
-        age: formData.age,
-        degree: formData.degree,
-        job_experience: formData.jobExperience,
-        from_email: formData.email,
-        message: formData.message,
-      };
+        await emailjs.send(
+            "service_y55bw9l", // Replace with your Email.js service ID
+            "template_nb605xl", // Replace with your Email.js template ID
+            emailParams,
+            "0LlVOg8BMb3Vq5Wuf" // Replace with your Email.js user ID
+        );
 
-      await emailjs.send(
-        "service_y55bw9l", // Replace with your Email.js service ID
-        "template_nb605xl", // Replace with your Email.js template ID
-        emailParams,
-        "0LlVOg8BMb3Vq5Wuf" // Replace with your Email.js user ID
-      );
+        toast.success("✅ Application submitted successfully!");
 
-      toast.success("✅ Application submitted successfully!", {
-        position: "top-center",
-        autoClose: 2500,
-        hideProgressBar: true,
-      });
-
-      setIsModalOpen(false);
-      setFormData({
-        fullName: "",
-        age: "",
-        degree: "",
-        jobExperience: "",
-        email: "",
-        message: "",
-        file: null,
-      });
+        // Reset form fields
+        setFormData({
+            fullName: "",
+            age: "",
+            degree: "",
+            jobExperience: "",
+            email: "",
+            message: "",
+            file: null,
+        });
     } catch (error) {
-      console.error("Error submitting application:", error);
-      toast.error("❌ Error submitting application. Please try again.", {
-        position: "top-center",
-        autoClose: 2500,
-        hideProgressBar: true,
-      });
+        console.error("Error submitting application:", error);
+        toast.error("❌ Error submitting application. Please try again.");
     }
-  };
+};
 
 
   return (
@@ -201,7 +191,7 @@ export default function Introduction() {
       
           <animated.button
             style={buttonSpring}
-            className="bg-[#60A805] rounded-3xl text-white font-kanit px-8 py-2 font-bold border-2 border-black md:px-12 md:py-2 md:border-[3px] md:text-xl lg:w-[220px] lg:h-[50px] lg:mt-7"
+            className="bg-[#60A805] rounded-3xl text-white font-kanit px-8 py-2 font-bold border-2 border-black md:px-12 md:py-2 md:border-[3px] md:text-xl md:mt-5 lg:w-[220px] lg:h-[50px] lg:mt-7"
             onClick={() => setIsModalOpen(true)}
           >
              Apply Now
