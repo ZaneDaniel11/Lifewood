@@ -19,6 +19,8 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 
+import { useUpdateApplicationStatusMutation } from "../../assets/services/HandleApplicationsApi";
+
 const Table = ({ applications, setApplications }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedApplication, setSelectedApplication] = useState(null);
@@ -57,76 +59,71 @@ const Table = ({ applications, setApplications }) => {
     setMessage("");
   };
 
-  const handleSubmit = async () => {
-    if (!selectedApplication) return;
+  const [updateApplicationStatus] = useUpdateApplicationStatusMutation();
 
-    try {
-      await axios.put(
-        `http://localhost:5237/api/ApplicationsApi/UpdateApplicationStatus`,
-        {},
-        {
-          params: {
-            id: selectedApplication.id,
-            status: "Accepted",
-          },
-        }
-      );
+const handleSubmit = async () => {
+  if (!selectedApplication) return;
 
-      setApplications((prevApplications) =>
-        prevApplications.map((app) =>
-          app.id === selectedApplication.id ? { ...app, applicationStatus: "Accepted" } : app
-        )
-      );
+  try {
+    await updateApplicationStatus({
+      id: selectedApplication.id,
+      status: "Accepted",
+    }).unwrap();
 
-      const emailParams = {
-        email: selectedApplication.email || "default@example.com",
-        to_name: selectedApplication.fullName || "Applicant",
-        message: message || "Your application has been accepted!",
-      };
+    setApplications((prevApplications) =>
+      prevApplications.map((app) =>
+        app.id === selectedApplication.id
+          ? { ...app, applicationStatus: "Accepted" }
+          : app
+      )
+    );
 
-      await emailjs.send(
-        "service_y55bw9l",
-        "template_0ka69sc",
-        emailParams,
-        "0LlVOg8BMb3Vq5Wuf"
-      );
+    const emailParams = {
+      email: selectedApplication.email || "default@example.com",
+      to_name: selectedApplication.fullName || "Applicant",
+      message: message || "Your application has been accepted!",
+    };
 
-      toast.success("Application status updated and email sent successfully!");
-      closeModal();
-    } catch (error) {
-      console.error("Error updating status: ", error);
-      toast.error("Failed to update application status.");
-    }
-  };
+    await emailjs.send(
+      "service_y55bw9l",
+      "template_0ka69sc",
+      emailParams,
+      "0LlVOg8BMb3Vq5Wuf"
+    );
 
-  const handleRejectSubmit = async () => {
-    if (!selectedApplication) return;
+    toast.success("✅ Application status updated and email sent!");
+    closeModal();
+  } catch (error) {
+    console.error("Error updating status: ", error);
+    toast.error("❌ Failed to update application status.");
+  }
+};
 
-    try {
-      await axios.put(
-        `http://localhost:5237/api/ApplicationsApi/UpdateApplicationStatus`,
-        {},
-        {
-          params: {
-            id: selectedApplication.id,
-            status: "Rejected",
-          },
-        }
-      );
+const handleRejectSubmit = async () => {
+  if (!selectedApplication) return;
 
-      setApplications((prevApplications) =>
-        prevApplications.map((app) =>
-          app.id === selectedApplication.id ? { ...app, applicationStatus: "Rejected" } : app
-        )
-      );
+  try {
+    await updateApplicationStatus({
+      id: selectedApplication.id,
+      status: "Rejected",
+    }).unwrap();
 
-      toast.success("Application rejected and email sent.");
-      closeModal();
-    } catch (error) {
-      console.error("Error rejecting application:", error);
-      toast.error("Failed to reject application.");
-    }
-  };
+    setApplications((prevApplications) =>
+      prevApplications.map((app) =>
+        app.id === selectedApplication.id
+          ? { ...app, applicationStatus: "Rejected" }
+          : app
+      )
+    );
+
+    toast.success("Application rejected successfully.");
+    closeModal();
+  } catch (error) {
+    console.error("Error rejecting application:", error);
+    toast.error("❌ Failed to reject application.");
+  }
+};
+
 
   return (
     <div className="bg-white shadow-md rounded-lg overflow-x-auto w-full">
