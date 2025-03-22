@@ -1,6 +1,7 @@
 import React from "react";
 import { useSpring, animated } from "@react-spring/web";
 import { useInView } from "react-intersection-observer";
+import { useScroll } from "./ScrollContext";
 
 export default function Technology() {
   const techList = [
@@ -10,6 +11,8 @@ export default function Technology() {
     { icon: "fa-folder-open", label: "DATA CURATION" },
     { icon: "fa-check-circle", label: "DATA VALIDATION" },
   ];
+
+  const { serviceRef } = useScroll();
 
   // Title Animation (h1)
   const [refH1, inViewH1] = useInView({ triggerOnce: true, threshold: 0.8 });
@@ -30,7 +33,7 @@ export default function Technology() {
   });
 
   return (
-    <div className="bg-[#1D1D1D] overflow-x-hidden">
+    <div className="bg-[#1D1D1D] overflow-x-hidden " ref={serviceRef}>
       <div className="text-center pt-8 font-kanit items-center justify-center mx-1.5 md:pt-[120px] lg:pb-[100px]">
         <animated.h1
           ref={refH1}

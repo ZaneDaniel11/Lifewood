@@ -5,6 +5,7 @@ import ErrorBoundary from "./ErrorBoundary";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { ScrollProvider } from "./ScrollContext";
 
 const Abouts = lazy(() => import("./About"));
 const StockTicker = lazy(() => import("./Components/Infinitescroll"));
@@ -31,17 +32,19 @@ function App() {
 
   return (
     <Router>
-      <ToastContainer /> {/* Add this at the root level */}
-      {loading ? (
-        <LoadingScreen setLoading={setLoading} />
-      ) : (
-        <Suspense fallback={<LoadingScreen />}>
-          <Routes>
-            <Route path="/" element={<MainApp showToast={showToast} />} />
-            <Route path="/admin" element={<ErrorBoundary><AdminDashboard /></ErrorBoundary>} />
-          </Routes>
-        </Suspense>
-      )}
+      <ScrollProvider>
+        <ToastContainer />
+        {loading ? (
+          <LoadingScreen setLoading={setLoading} />
+        ) : (
+          <Suspense fallback={<LoadingScreen />}>
+            <Routes>
+              <Route path="/" element={<MainApp showToast={showToast} />} />
+              <Route path="/admin" element={<ErrorBoundary><AdminDashboard /></ErrorBoundary>} />
+            </Routes>
+          </Suspense>
+        )}
+      </ScrollProvider>
     </Router>
   );
 }
