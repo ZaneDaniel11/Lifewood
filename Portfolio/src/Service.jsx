@@ -33,7 +33,7 @@ export default function Technology() {
   });
 
   return (
-    <div className="bg-[#1D1D1D] overflow-x-hidden " ref={serviceRef}>
+    <div className="bg-[#1D1D1D] overflow-x-hidden scroll-mt-24" ref={serviceRef}>
       <div className="text-center pt-8 font-kanit items-center justify-center mx-1.5 md:pt-[120px] lg:pb-[100px]">
         <animated.h1
           ref={refH1}

@@ -5,6 +5,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import emailjs from "emailjs-com";
 import { useCreateApplicationMutation } from "../assets/services/HandleApplicationsApi";
+import { useScroll } from "../ScrollContext";
 
 import "../CSS/Introduction.css";
 
@@ -170,8 +171,9 @@ export default function Introduction() {
 };
 
 
+const { introductionRef } = useScroll();
   return (
-    <div className="block md:h-[500px] lg:h-[700px]">
+    <div className="block md:h-[500px] lg:h-[700px] scroll-mt-24"  ref={introductionRef} >
        <ToastContainer />
       <div className="mt-[20px] flex flex-col md:mt-0 md:flex-row h-auto bg-body-yellow font-kanit items-center md:items-start justify-center md:justify-between space-y-8 md:space-y-0 md:space-x-8 px-4 py-6 md:py-10  md:pt-[30px] md:pb-[100px] lg:pb-[50px]">
           <div className="text-center md:mt-[100px] md:text-left lg:ml-10">

@@ -4,10 +4,11 @@ import { useScroll } from "../ScrollContext";
 
 export default function Headers() {
   const [isOpen, setIsOpen] = useState(false);
-  const { scrollToService } = useScroll();
+  const { scrollToServiceWithIntro } = useScroll();
   
-  const handleServiceClick = () => {
-    scrollToService();
+  const handleServiceClick = (e) => {
+    e.preventDefault();
+    scrollToServiceWithIntro();
     if (isOpen) setIsOpen(false);
   };
   
