@@ -9,7 +9,7 @@ import 'react-toastify/dist/ReactToastify.css';
 const Abouts = lazy(() => import("./About"));
 const StockTicker = lazy(() => import("./Components/Infinitescroll"));
 const Portfolio = lazy(() => import("./Portfolio"));
-const Technology = lazy(() => import("./Technology"));
+const Service = lazy(() => import("./Service"));
 const AdminDashboard = lazy(() => import("./AdminSide/AdminDashboard"));
 const Footer = lazy(() => import("./Components/Footer"));
 
@@ -50,7 +50,7 @@ function MainApp({ showToast }) {
   return (
     <Suspense fallback={<LoadingScreen />}>
       <ErrorBoundary><Abouts /></ErrorBoundary>
-      <ErrorBoundary><Technology /></ErrorBoundary>
+      <ErrorBoundary><Service /></ErrorBoundary>
       <ErrorBoundary><StockTicker /></ErrorBoundary>
       <ErrorBoundary><Portfolio /></ErrorBoundary>
       <ErrorBoundary><Footer /></ErrorBoundary>
