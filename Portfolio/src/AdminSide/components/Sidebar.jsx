@@ -1,4 +1,4 @@
-"use client"
+
 import { X, LayoutDashboard, Users, Settings, FileText, Bell, LogOut } from "lucide-react"
 
 const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
