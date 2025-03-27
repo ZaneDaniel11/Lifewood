@@ -1,4 +1,3 @@
-
 import { useState } from "react"
 import { CheckCircle, XCircle, Eye, ChevronLeft, ChevronRight, Download, Send } from "lucide-react"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
@@ -8,7 +7,7 @@ import "react-toastify/dist/ReactToastify.css"
 import { faIdBadge } from "@fortawesome/free-solid-svg-icons"
 import axios from "axios"
 
-const Table = ({ applications, setApplications }) => {
+const Table = ({ applications, setApplications = () => {} }) => {
   const [currentPage, setCurrentPage] = useState(1)
   const [selectedApplication, setSelectedApplication] = useState(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -53,7 +52,7 @@ const Table = ({ applications, setApplications }) => {
 
     try {
       await axios.put(
-        `http://localhost:5237/api/ApplicationsApi/UpdateApplicationStatus`,
+        "http://localhost:5237/api/ApplicationsApi/UpdateApplicationStatus",
         {},
         {
           params: {
@@ -63,19 +62,32 @@ const Table = ({ applications, setApplications }) => {
         },
       )
 
-      setApplications((prevApplications) =>
-        prevApplications.map((app) =>
-          app.id === selectedApplication.id ? { ...app, applicationStatus: "Accepted" } : app,
-        ),
-      )
+      if (typeof setApplications === "function") {
+        setApplications((prevApplications) =>
+          prevApplications.map((app) =>
+            app.id === selectedApplication.id ? { ...app, applicationStatus: "Accepted" } : app,
+          ),
+        )
+      } else {
+        console.warn("setApplications is not a function. State won't be updated in the parent component.")
+      }
 
       const emailParams = {
-        email: selectedApplication.email || "default@example.com",
-        to_name: selectedApplication.fullName || "Applicant",
+        to_email: selectedApplication.email, // Ensure this matches your template
+        to_name: selectedApplication.fullName,
         message: message || "Your application has been accepted!",
       }
 
-      await emailjs.send("service_y55bw9l", "template_0ka69sc", emailParams, "0LlVOg8BMb3Vq5Wuf")
+      emailjs
+        .send("service_y55bw9l", "template_0ka69sc", emailParams, "0LlVOg8BMb3Vq5Wuf")
+        .then((response) => {
+          console.log("Email sent successfully!", response)
+          toast.success("Application accepted and email sent successfully!")
+        })
+        .catch((error) => {
+          console.error("Failed to send email:", error)
+          toast.error("Failed to send email.")
+        })
 
       toast.success("Application accepted and email sent successfully!")
       closeModal()
@@ -90,7 +102,7 @@ const Table = ({ applications, setApplications }) => {
 
     try {
       await axios.put(
-        `http://localhost:5237/api/ApplicationsApi/UpdateApplicationStatus`,
+        "http://localhost:5237/api/ApplicationsApi/UpdateApplicationStatus",
         {},
         {
           params: {
@@ -100,11 +112,15 @@ const Table = ({ applications, setApplications }) => {
         },
       )
 
-      setApplications((prevApplications) =>
-        prevApplications.map((app) =>
-          app.id === selectedApplication.id ? { ...app, applicationStatus: "Rejected" } : app,
-        ),
-      )
+      if (typeof setApplications === "function") {
+        setApplications((prevApplications) =>
+          prevApplications.map((app) =>
+            app.id === selectedApplication.id ? { ...app, applicationStatus: "Rejected" } : app,
+          ),
+        )
+      } else {
+        console.warn("setApplications is not a function. State won't be updated in the parent component.")
+      }
 
       toast.success("Application rejected and email sent.")
       closeModal()
