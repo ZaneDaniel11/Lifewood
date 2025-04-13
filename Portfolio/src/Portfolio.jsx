@@ -9,6 +9,7 @@ import Customer from "./assets/Portfolio/CustomerService.png";
 import Computer from "./assets/Portfolio/ComputerVision.png";
 import Driving from "./assets/Portfolio/autonomousDriving.png";
 
+
 export default function Portfolio() {
   const portfolioItems = [
     {
