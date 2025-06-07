@@ -13,6 +13,7 @@ const Portfolio = lazy(() => import("./Portfolio"));
 const Service = lazy(() => import("./Service"));
 const AdminDashboard = lazy(() => import("./AdminSide/AdminDashboard"));
 const Footer = lazy(() => import("./Components/Footer"));
+const Login = lazy(() => import("./Login-form"));
 
 function App() {
   const [loading, setLoading] = useState(false);
@@ -41,6 +42,7 @@ function App() {
             <Routes>
               <Route path="/" element={<MainApp showToast={showToast} />} />
               <Route path="/admin" element={<ErrorBoundary><AdminDashboard /></ErrorBoundary>} />
+              <Route path="/login" element={<ErrorBoundary><Login /></ErrorBoundary>} />
             </Routes>
           </Suspense>
         )}
